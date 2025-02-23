@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="bmi.html">BMI Calculator</a></li>
+            <li><a href="email.html">Email Sender</a></li>
+            <li><a href="weather">Weather API</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="auth.html">Auth</a></li>
+            <li><a href="qrcode.html">QR Code</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h1>Login or Register</h1>
+
+        <!-- Login Form -->
+        <div id="login-form">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <label for="login-email">Email:</label>
+                <input type="email" id="login-email" name="email" required>
+                <label for="login-password">Password:</label>
+                <input type="password" id="login-password" name="password" required>
+                <button type="submit">Login</button>
+            </form>
+            <p>Don't have an account? <a href="#" id="show-register">Register here</a></p>
+        </div>
+
+        <!-- Register Form -->
+        <div id="register-form" style="display: none;">
+            <h2>Register</h2>
+            <form id="registerForm">
+                <label for="register-name">Name:</label>
+                <input type="text" id="register-name" name="username" required>
+                <label for="register-email">Email:</label>
+                <input type="email" id="register-email" name="email" required>
+                <label for="register-password">Password:</label>
+                <input type="password" id="register-password" name="password" required>
+                <button type="submit">Register</button>
+            </form>
+            <p>Already have an account? <a href="#" id="show-login">Login here</a></p>
+        </div>
+    </main>
+
+
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const registerForm = document.getElementById("registerForm");
+    const loginForm = document.getElementById("loginForm");
+    const loginDiv = document.getElementById("login-form");
+    const registerDiv = document.getElementById("register-form");
+
+    document.getElementById("show-register").addEventListener("click", function (event) {
+        event.preventDefault();
+        loginDiv.style.display = "none";
+        registerDiv.style.display = "block";
+    });
+
+    document.getElementById("show-login").addEventListener("click", function (event) {
+        event.preventDefault();
+        registerDiv.style.display = "none";
+        loginDiv.style.display = "block";
+    });
+
+    if (registerForm) {
+        registerForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            const username = document.getElementById("register-name").value;
+            const email = document.getElementById("register-email").value;
+            const password = document.getElementById("register-password").value;
+
+            const response = await fetch("/api/auth/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username, email, password }),
+            });
+
+            const data = await response.json();
+            alert(data.message);
+            if (response.ok) {
+                registerDiv.style.display = "none";
+                loginDiv.style.display = "block";
+            }
+        });
+    }
+
+    if (loginForm) {
+        loginForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+            const email = document.getElementById("login-email").value;
+            const password = document.getElementById("login-password").value;
+
+            const response = await fetch("/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const data = await response.json();
+            alert(data.message);
+            if (response.ok) window.location.href = "index.html";
+        });
+    }
+});
+
+    </script>
+</body>
+</html>

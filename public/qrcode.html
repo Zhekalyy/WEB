@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="bmi.html">BMI Calculator</a></li>
+            <li><a href="email.html">Email Sender</a></li>
+            <li><a href="weather">Weather API</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="auth.html">Auth</a></li>
+            <li><a href="qrcode.html">QR Code</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h1>QR Code Generator</h1>
+        <form id="qr-form">
+            <label for="qr-url">Enter URL:</label>
+            <input type="text" id="qr-url" name="url" placeholder="https://example.com" required>
+            <button type="submit">Generate QR Code</button>
+        </form>
+
+        <div id="qr-result">
+            <h2>Your QR Code:</h2>
+            <img id="qr-image" src="" alt="QR Code" style="display: none;">
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('qr-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const url = document.getElementById('qr-url').value;
+            if (!url) return alert("Please enter a valid URL.");
+
+            // Обновляем src у изображения
+            const qrImage = document.getElementById('qr-image');
+            qrImage.src = `/generate-qr?url=${encodeURIComponent(url)}`;
+            qrImage.style.display = 'block';
+        });
+
+    </script>
+</body>
+</html>
